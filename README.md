@@ -1,9 +1,9 @@
 # KindleImagePreviewer
 
 this is a tool to preview how images would look on a kindle, when you set a custom sleep screen with KOReader.
-![Example ](/assets/preview.png)
 
-![Example on kindle](/assets/yuyuko_example.webp)
+![Example](/assets/bench_preview.png)
+![Example on a kindle](/assets/bench_example.jpg)
 
 # How to use:
 https://youtu.be/uy50kZ9SN4c
@@ -34,4 +34,4 @@ https://youtu.be/uy50kZ9SN4c
 # Another example (for horizontal stuff)
 ![Example ](/assets/sunny_preview.png)
 
-![Example on kindle](/assets/sunny_example.webp)
+![Example on kindle](/assets/sunny_example.jpg)
