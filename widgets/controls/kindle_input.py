@@ -1,12 +1,16 @@
+from PySide6.QtCore import QLine
 from PySide6.QtGui import QFont, Qt
 from PySide6.QtWidgets import (
     QFrame,
+    QGridLayout,
     QLabel,
     QLineEdit,
     QSizePolicy,
     QVBoxLayout,
 )
+from pathlib import Path
 from other import files
+from other.signals import get_signals
 
 
 class KindleInput(QFrame):
@@ -23,11 +27,12 @@ class KindleInput(QFrame):
             """
         )
 
-        self.main_layout = QVBoxLayout(self)
+        self.main_layout = QGridLayout(self)
         self.main_layout.setContentsMargins(5, 5, 5, 5)
         self.main_layout.setSpacing(5)
         self.main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
+        # LEFT SIDE
         self.width_input = self._Inputter("Enter Kindle Width:")
         self.height_input = self._Inputter("Enter Kindle Height:")
 
@@ -38,8 +43,12 @@ class KindleInput(QFrame):
         self.width_input.input.textChanged.connect(files.update_kindle_width)
         self.height_input.input.textChanged.connect(files.update_kindle_height)
 
-        self.main_layout.addWidget(self.width_input)
-        self.main_layout.addWidget(self.height_input)
+        self.main_layout.addWidget(self.width_input, 0, 0)
+        self.main_layout.addWidget(self.height_input, 1, 0)
+
+        # RIGHT SIDE
+        # self.other_settings = OtherSettings()
+        # self.main_layout.addWidget(self.other_settings, 0, 1, 2, 1)
 
     class _Inputter(QFrame):
         def __init__(self, text, *args, **kwargs):

@@ -20,9 +20,6 @@ class MainWindow(QMainWindow):
         notification_daemon = get_notification_daemon()
         notification_daemon.new_message.connect(print)
 
-        # do initial load, just to check everything is swell
-        files.config()
-
     def keyPressEvent(self, event: QKeyEvent, /) -> None:
         if event.key() == Qt.Key.Key_Escape:
             self.close()

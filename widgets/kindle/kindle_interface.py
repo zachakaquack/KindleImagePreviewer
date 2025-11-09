@@ -11,7 +11,7 @@ class KindleInterface(QFrame):
         # self.setFixedSize(936, 936)
         self.setStyleSheet(
             """
-            background-color: #303030;
+            background-color: #1e1e1e;
             color: white;
             """
         )

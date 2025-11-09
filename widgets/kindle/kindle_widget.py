@@ -2,7 +2,6 @@ from PySide6.QtGui import QPixmap, Qt
 from PySide6.QtWidgets import QFrame, QLabel, QSizePolicy, QVBoxLayout
 from pathlib import Path
 from other import image_manip
-from classes.transparent_sides import TransparentSides
 from other import files
 from other.signals import get_signals
 

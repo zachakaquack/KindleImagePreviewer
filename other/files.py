@@ -1,7 +1,9 @@
 from pathlib import Path
 import json
+from typing import Any
 from other.notifications import get_notification_daemon
 from classes.kindle import Kindle
+import sys
 
 
 def write_default_config(path: Path) -> None:
@@ -10,6 +12,7 @@ def write_default_config(path: Path) -> None:
             "image_path": f"{image_path()}",
             "gray_prefix": "",
             "gray_suffix": "_gray",
+            "singletons": {"display_resolution_warning": True},
         },
         "kindle_settings": {
             "width": 600,
@@ -84,3 +87,41 @@ def create_export_path(original_image_path: Path) -> Path:
     # doozy
     # extension is png because it is always transferred into that
     return Path(f"{img_path}/{prefix}{name}{suffix}.png")
+
+
+def update_prefix_suffix(prefix: str, suffix: str):
+    cfg: dict = config()
+    cfg["settings"]["gray_prefix"] = prefix
+    cfg["settings"]["gray_suffix"] = suffix
+    write_config(cfg)
+
+
+def get_prefix() -> str:
+    cfg: dict = config()
+    return cfg["settings"]["gray_prefix"]
+
+
+def get_suffix() -> str:
+    cfg: dict = config()
+    return str(cfg["settings"]["gray_suffix"])
+
+
+def get_singleton(key: str) -> bool:
+    cfg: dict = config()
+    return cfg["settings"]["singletons"][key]
+
+
+def update_singleton(key: str, value: Any) -> Any:
+    cfg: dict = config()
+    cfg["settings"]["singletons"][key] = value
+    write_config(cfg)
+    return value
+
+
+def resource_path(relative_path: str):
+    if hasattr(sys, "_MEIPASS"):
+        base_path = Path(sys._MEIPASS)  # type: ignore[attr-defined]
+    else:
+        base_path = Path(__file__).parent.resolve().parent
+
+    return base_path / relative_path

@@ -1,7 +1,6 @@
 from PIL import Image
 from pathlib import Path
 
-from classes.transparent_sides import TransparentSides
 from other import files
 from other.notifications import get_notification_daemon
 

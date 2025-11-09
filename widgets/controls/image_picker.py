@@ -8,6 +8,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 from other.signals import get_signals
+from other.files import get_singleton
 
 
 class ImagePicker(QFrame):
@@ -30,6 +31,21 @@ class ImagePicker(QFrame):
             Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter
         )
 
+        if get_singleton("display_resolution_warning"):
+            warning_label = QLabel(
+                "Make sure to set your Resolution! (see: Settings, Help)"
+            )
+            warning_label.setSizePolicy(
+                QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
+            )
+            warning_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            font = QFont("Calibri", 18)
+            font.setUnderline(True)
+            font.setBold(True)
+            warning_label.setFont(font)
+            self.main_layout.addWidget(warning_label)
+            self.main_layout.addSpacing(15)
+
         self.image_picker_label = QLabel("Select your image...")
         self.image_picker_label.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
@@ -50,6 +66,7 @@ class ImagePicker(QFrame):
         self.image_picker_button.setFont(QFont("Calibri", 24))
         self.image_picker_button.setStyleSheet("background-color: #1e1e1e;")
         self.image_picker_button.clicked.connect(self._launch_dialog)
+        self.image_picker_button.setCursor(Qt.CursorShape.PointingHandCursor)
 
         self.main_layout.addWidget(self.image_picker_button)
 
@@ -61,7 +78,18 @@ class ImagePicker(QFrame):
     def _launch_dialog(self) -> None:
         dialog = QFileDialog(
             self,
-            filter="PNG (*.png);;BMP (*.bmp);;CUR (*.cur);;GIF (*.gif);;ICNS (*.icns);;ICO (*.ico);;JPEG (*.jpeg);;JPG (*.jpg);;PBM (*.pbm);;PGM (*.pgm);;PPM (*.ppm);;SVG (*.svg);;SVGZ (*.svgz);;TGA (*.tga);;TIF (*.tif);;TIFF (*.tiff);;WBMP (*.wbmp);;WEBP (*.webp);;XBM (*.xbm);;XPM (*.xpm)",
         )
+        dialog.setNameFilters(
+            [
+                "Images (*.png *.jpg *.jpeg *.webp)",
+                "PNG (*.png)",
+                "JPEG (*.jpeg)",
+                "JPG (*.jpg)",
+                "WEBP (*.webp)",
+            ]
+        )
+        dialog.selectNameFilter("Images (*.png *.jpg *.jpeg *.webp)")
+        dialog.setFileMode(QFileDialog.FileMode.ExistingFile)
+        dialog.setAcceptMode(QFileDialog.AcceptMode.AcceptOpen)
         dialog.fileSelected.connect(self._prepare_file)
         dialog.exec()
