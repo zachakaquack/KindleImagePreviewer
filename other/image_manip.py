@@ -11,7 +11,15 @@ from other.notifications import get_notification_daemon
 
 def grayscale_image(image_path: Path) -> QImage:
     img = Image.open(f"{image_path}")
-    img = img.convert("L")
+
+    # grayscale it
+    img = img.convert("LA")
+
+    # convert back to rgba for the image
+    img = img.convert("RGBA")
+
+    # there is no image format built into qt that allows for grayscale + alpha,
+    # so we have to do this weird workaround
     return ImageQt.toqimage(img)
 
 
