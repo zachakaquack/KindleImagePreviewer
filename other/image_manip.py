@@ -28,13 +28,6 @@ def create_grayscaled_color_bg(size: tuple[int, int], original_color: str) -> QI
     gray = int((color.red() * 0.299) + (color.green() * 0.587) + (color.blue() * 0.114))
     alpha = color.alpha()
 
-    if alpha > 0 and alpha < 255:
-        notif = get_notification_daemon()
-        notif.new_message.emit(
-            "Warning! KOReader does not support transparency values between 0 and 255. Only 0 and 255 are allowed."
-        )
-        alpha = 0
-
     gray_color = QColor(gray, gray, gray, alpha)
 
     qt = QImage(QSize(size[0], size[1]), QImage.Format.Format_ARGB32)

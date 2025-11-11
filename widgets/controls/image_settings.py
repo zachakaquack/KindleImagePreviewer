@@ -223,8 +223,6 @@ class ColorPicker(QFrame):
             (color.red() * 0.299) + (color.green() * 0.587) + (color.blue() * 0.114)
         )
         alpha = color.alpha()
-        if alpha > 0 and alpha < 255:
-            alpha = 0
 
         gray_color = QColor(gray, gray, gray, alpha)
         self.button.setStyleSheet(
