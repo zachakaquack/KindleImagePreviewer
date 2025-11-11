@@ -4,8 +4,6 @@ from PySide6.QtWidgets import QMainWindow, QApplication
 import sys
 
 from widgets.interface import Interface
-from other.notifications import get_notification_daemon
-from other import files
 
 
 class MainWindow(QMainWindow):
@@ -16,9 +14,6 @@ class MainWindow(QMainWindow):
         self.setFixedSize(1664, 936)
         self.interface = Interface()
         self.setCentralWidget(self.interface)
-
-        notification_daemon = get_notification_daemon()
-        notification_daemon.new_message.connect(print)
 
     def keyPressEvent(self, event: QKeyEvent, /) -> None:
         if event.key() == Qt.Key.Key_Escape:

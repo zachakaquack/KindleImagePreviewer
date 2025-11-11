@@ -78,8 +78,16 @@ class SettingsPage(QScrollArea):
         description = "Whether or not to display the warning about setting the resolution of your kindle on startup"
         resolution = TitleLabel(title_font, description, "Display Resolution Warning")
         self.main_layout.addWidget(resolution)
+
         display_resolution_warning = SingletonSwitcher("display_resolution_warning")
         self.main_layout.addWidget(display_resolution_warning)
+
+        description = "Whether or not to render the text in the image preview behind the image as dark mode or not"
+        dark_mode = TitleLabel(title_font, description, "Dark Mode Text in Image")
+        self.main_layout.addWidget(dark_mode)
+
+        use_dark_mode_text = SingletonSwitcher("use_dark_mode_text")
+        self.main_layout.addWidget(use_dark_mode_text)
 
 
 class TitleLabel(QLabel):
@@ -95,6 +103,7 @@ class SingletonSwitcher(QFrame):
     def __init__(self, key: str, *args, **kwargs):
         super().__init__(*args, *kwargs)
 
+        self.key = key
         self.setStyleSheet(
             """
             QFrame{
@@ -106,7 +115,7 @@ class SingletonSwitcher(QFrame):
             """
         )
 
-        self.on = files.get_singleton("display_resolution_warning")
+        self.on = files.get_singleton(self.key)
 
         self.main_layout = QHBoxLayout(self)
         self.setLayout(self.main_layout)
@@ -141,14 +150,14 @@ class SingletonSwitcher(QFrame):
 
     def toggle_off(self):
         self.on = False
-        files.update_singleton("display_resolution_warning", self.on)
+        files.update_singleton(self.key, self.on)
 
         self.on_button.setStyleSheet("color: gray;")
         self.off_button.setStyleSheet("color: red;")
 
     def toggle_on(self):
         self.on = True
-        files.update_singleton("display_resolution_warning", self.on)
+        files.update_singleton(self.key, self.on)
 
         self.on_button.setStyleSheet("color: green;")
         self.off_button.setStyleSheet("color: gray;")

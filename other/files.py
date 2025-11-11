@@ -2,6 +2,7 @@ from pathlib import Path
 import json
 from typing import Any
 from other.notifications import get_notification_daemon
+from other.signals import get_signals
 from classes.kindle import Kindle
 import sys
 
@@ -12,11 +13,24 @@ def write_default_config(path: Path) -> None:
             "image_path": f"{image_path()}",
             "gray_prefix": "",
             "gray_suffix": "_gray",
-            "singletons": {"display_resolution_warning": True},
+            "singletons": {
+                "display_resolution_warning": True,
+                "use_dark_mode_text": False,
+            },
         },
         "kindle_settings": {
             "width": 600,
             "height": 800,
+        },
+        "image_settings": {
+            "fit_x": True,
+            "fit_y": True,
+            "offset_x": 0,
+            "offset_y": 0,
+            "scale_factor": 100,
+            "fill_color": "#00000000",
+            "rotation_count": 0,
+            "rotation_offset": 0,
         },
     }
 
@@ -115,6 +129,9 @@ def update_singleton(key: str, value: Any) -> Any:
     cfg: dict = config()
     cfg["settings"]["singletons"][key] = value
     write_config(cfg)
+
+    signals = get_signals()
+    signals.refresh_image.emit()
     return value
 
 
@@ -125,3 +142,19 @@ def resource_path(relative_path: str):
         base_path = Path(__file__).parent.resolve().parent
 
     return base_path / relative_path
+
+
+def get_image_settings() -> dict:
+    cfg: dict = config()
+    return cfg["image_settings"]
+
+
+def update_image_settings(key: str, value: Any) -> Any:
+    cfg: dict = config()
+    cfg["image_settings"][key] = value
+    write_config(cfg)
+
+    signals = get_signals()
+    signals.image_settings_changed.emit(cfg)
+
+    return value

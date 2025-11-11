@@ -10,12 +10,12 @@ class LogWidget(QScrollArea):
         super().__init__(*args, *kwargs)
 
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.setFixedHeight(300)
+        self.setFixedHeight(150)
 
         self.setObjectName("scroller")
         self.setStyleSheet(
             """
-                background-color: #303030;
+                background-color: #1e1e1e;
                 color: white;
             """
         )
@@ -58,7 +58,7 @@ class LogItem(QFrame):
 
         self.setFixedHeight(50)
 
-        self.setStyleSheet("background-color: #1e1e1e; border-radius: 5px;")
+        self.setStyleSheet("background-color: #303030; border-radius: 5px;")
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         self.main_layout = QVBoxLayout(self)
@@ -73,4 +73,6 @@ class LogItem(QFrame):
         label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         label.setFont(QFont("Calibri", 12))
+        label.setWordWrap(True)
+        label.setFixedWidth(500)
         self.main_layout.addWidget(label)

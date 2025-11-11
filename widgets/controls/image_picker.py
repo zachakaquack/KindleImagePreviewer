@@ -17,16 +17,17 @@ class ImagePicker(QFrame):
 
         self.setStyleSheet(
             """
-            background-color: #303030;
+            background-color: #1e1e1e;
             border-radius: 5px;
             """
         )
+        self.setMaximumHeight(200)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         self.main_layout = QVBoxLayout(self)
         self.setLayout(self.main_layout)
         self.main_layout.setContentsMargins(5, 5, 5, 5)
-        self.main_layout.setSpacing(0)
+        self.main_layout.setSpacing(5)
         self.main_layout.setAlignment(
             Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter
         )
@@ -46,29 +47,38 @@ class ImagePicker(QFrame):
             self.main_layout.addWidget(warning_label)
             self.main_layout.addSpacing(15)
 
-        self.image_picker_label = QLabel("Select your image...")
-        self.image_picker_label.setSizePolicy(
-            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
+        self.image_picker_button = QPushButton("Select your image...")
+        self.image_picker_button.setFont(QFont("Calibri", 24))
+        self.image_picker_button.setStyleSheet(
+            "background-color: #303030; padding: 5px;"
         )
-        self.image_picker_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.image_picker_label.setFont(QFont("Calibri", 24))
-        self.main_layout.addWidget(self.image_picker_label)
+        self.image_picker_button.clicked.connect(self._launch_dialog)
+        self.image_picker_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.main_layout.addWidget(self.image_picker_button)
+
+        self.image_exporter_button = QPushButton("Export Image")
+        self.image_exporter_button.setFont(QFont("Calibri", 24))
+        self.image_exporter_button.setStyleSheet(
+            "background-color: #303030; padding: 5px;"
+        )
+        self.image_exporter_button.clicked.connect(self._export_image)
+        self.image_exporter_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.main_layout.addWidget(self.image_exporter_button)
 
         self.image_path_label = QLabel("...")
+        self.image_path_label.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+        )
+        self.image_path_label.setWordWrap(True)
+        # self.image_path_label.setFixedWidth(500)
         self.image_path_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.image_path_label.setStyleSheet("color: hsl(0, 0%, 50%)")
         self.image_path_label.setFont(QFont("Calibri", 16))
         self.main_layout.addWidget(self.image_path_label)
 
-        self.main_layout.addSpacing(25)
-
-        self.image_picker_button = QPushButton("Select")
-        self.image_picker_button.setFont(QFont("Calibri", 24))
-        self.image_picker_button.setStyleSheet("background-color: #1e1e1e;")
-        self.image_picker_button.clicked.connect(self._launch_dialog)
-        self.image_picker_button.setCursor(Qt.CursorShape.PointingHandCursor)
-
-        self.main_layout.addWidget(self.image_picker_button)
+    def _export_image(self) -> None:
+        signal = get_signals()
+        signal.export_image.emit()
 
     def _prepare_file(self, file):
         self.image_path_label.setText(file)
